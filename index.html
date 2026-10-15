@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>یک نامه برای تو</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background: linear-gradient(135deg, #f8e8e8, #e9e2f5);
+            font-family: Tahoma, sans-serif;
+            color: #443746;
+        }
+
+        .letter {
+            width: 100%;
+            max-width: 600px;
+            padding: 36px 28px;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 20px;
+            box-shadow: 0 15px 50px #49334a20;
+            line-height: 2.4;
+            animation: appear 1s ease;
+        }
+
+        h1 {
+            text-align: center;
+            color: #9b668c;
+            font-size: 26px;
+        }
+
+        .message {
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            font-size: 16px;
+        }
+
+        .signature {
+            margin-top: 28px;
+            text-align: left;
+            color: #9b668c;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="letter">
+        <h1>یک نامه برای تو</h1>
+
+        <div class="message">اینجا متن نامه‌ات را بنویس.
+
+این صفحه فقط برای تو ساخته شده است.</div>
+
+        <div class="signature">با مهر، از طرف من</div>
+    </main>
+</body>
+</html>
