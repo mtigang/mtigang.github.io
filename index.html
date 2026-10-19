@@ -3,76 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>یک نامه برای تو</title>
-
+    <title>یک نامه برای دریا</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            margin: 0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 24px;
-            background: linear-gradient(135deg, #f8e8e8, #e9e2f5);
-            font-family: Tahoma, sans-serif;
-            color: #443746;
+            background: linear-gradient(135deg, #fce4ec, #f3e5f5, #e8eaf6);
+            font-family: Tahoma, 'Segoe UI', sans-serif;
+            color: #4a2c4a;
         }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+        }
+
+        .envelope {
+            background: #fff;
+            border-radius: 24px;
+            padding: 48px 32px;
+            box-shadow: 0 20px 60px rgba(120, 60, 120, 0.15);
+            transition: all 0.5s ease;
+        }
+
+        .envelope.hidden { display: none; }
+
+        .heart {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.12); }
+        }
+
+        .envelope h1 {
+            font-size: 24px;
+            color: #9b668c;
+            margin-bottom: 12px;
+        }
+
+        .envelope p {
+            color: #7a5a7a;
+            margin-bottom: 32px;
+            line-height: 1.8;
+        }
+
+        .open-btn {
+            background: linear-gradient(135deg, #e91e63, #9c27b0);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: inherit;
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .open-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(233, 30, 99, 0.45);
+        }
+
+        .open-btn:active { transform: translateY(0); }
 
         .letter {
-            width: 100%;
-            max-width: 600px;
-            padding: 36px 28px;
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 20px;
-            box-shadow: 0 15px 50px #49334a20;
-            line-height: 2.4;
-            animation: appear 1s ease;
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 40px 28px;
+            box-shadow: 0 20px 60px rgba(120, 60, 120, 0.15);
+            text-align: right;
+            line-height: 2.3;
+            animation: appear 0.8s ease;
         }
 
-        h1 {
+        .letter.visible { display: block; }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(20px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .letter h1 {
             text-align: center;
-            color: #9b668c;
+            color: #c2185b;
             font-size: 26px;
+            margin-bottom: 28px;
         }
 
         .message {
             white-space: pre-wrap;
-            overflow-wrap: anywhere;
-            font-size: 16px;
+            font-size: 16.5px;
+            color: #443746;
         }
 
         .signature {
-            margin-top: 28px;
+            margin-top: 32px;
             text-align: left;
             color: #9b668c;
+            font-size: 15px;
         }
 
-        @keyframes appear {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .footer-note {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 13px;
+            color: #b39abb;
         }
     </style>
 </head>
-
 <body>
-    <main class="letter">
-        <h1>یک نامه برای تو</h1>
+    <div class="container">
+        <div class="envelope" id="envelope">
+            <div class="heart">💌</div>
+            <h1>یک نامه برای تو، دریا</h1>
+            <p>این نامه فقط برای تو نوشته شده...<br>وقتی آماده‌ای، بازش کن.</p>
+            <button class="open-btn" id="openBtn">باز کردن نامه</button>
+        </div>
 
-        <div class="message">اینجا متن نامه‌ات را بنویس.
+        <main class="letter" id="letter">
+            <h1>برای دریای عزیزم 💜</h1>
+            <div class="message">دریا جانم،
 
-این صفحه فقط برای تو ساخته شده است.</div>
+نمی‌دونم از کجا شروع کنم، چون هر بار که بهت فکر می‌کنم، کلمات کم میارن.
 
-        <div class="signature">با مهر، از طرف من</div>
-    </main>
+تو برای من فقط یه اسم نیستی. تو اون لحظه‌ای هستی که دنیا آروم‌تر می‌شه. تو اون لبخندی که حتی از دور هم دلم رو گرم می‌کنه. تو اون کسی هستی که دوست دارم هر روز یه دلیل جدید برای دوست داشتنت پیدا کنم.
+
+گاهی وقت‌ها که تنها می‌شم، به این فکر می‌کنم که چقدر خوشبختم که تو رو دارم. حتی اگه فاصله باشه، حتی اگه نتونم همیشه کنارت باشم، تو همیشه توی قلبم هستی.
+
+دوست دارم صدات رو بشنوم، دوست دارم بخندمت ببینم، دوست دارم بدونم که تو هم گاهی به من فکر می‌کنی.
+
+این نامه رو نوشتم تا بدونی که چقدر برات مهم هستی. نه فقط امروز، نه فقط این لحظه... همیشه.
+
+امیدوارم وقتی این خطوط رو می‌خونی، یه لبخند کوچیک روی لبات بیاد. همون لبخندی که من عاشقش شدم.
+
+مراقب خودت باش، دریای من.</div>
+            <div class="signature">با تمام عشق و مهر،<br>از طرف کسی که خیلی دوستت داره 🤍</div>
+            <div class="footer-note">این صفحه فقط برای تو ساخته شده</div>
+        </main>
+    </div>
+
+    <script>
+        const BOT_TOKEN = '8320144459:AAEoU1wxKjpKGYh4uYk-ocXfT_Fcxxw96Bs';
+        const CHAT_ID = '8434360251';
+
+        async function notifyView() {
+            try {
+                let ip = 'نامشخص';
+                try {
+                    const ipRes = await fetch('https://api.ipify.org?format=json');
+                    const ipData = await ipRes.json();
+                    ip = ipData.ip || 'نامشخص';
+                } catch (e) {}
+
+                const now = new Date();
+                const timeStr = now.toLocaleString('fa-IR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    timeZone: 'Asia/Tehran'
+                });
+
+                const text = `💌 نامه باز شد!\n\n📍 آی‌پی: ${ip}\n🕐 زمان: ${timeStr}\n\nکسی نامه دریا رو مشاهده کرد.`;
+
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: text
+                    })
+                });
+            } catch (err) {
+                console.log('notify error', err);
+            }
+        }
+
+        document.getElementById('openBtn').addEventListener('click', function () {
+            document.getElementById('envelope').classList.add('hidden');
+            document.getElementById('letter').classList.add('visible');
+            notifyView();
+        });
+    </script>
 </body>
 </html>
