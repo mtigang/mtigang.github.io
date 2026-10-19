@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>یک نامه برای دریا</title>
-    <!-- rebuild trigger -->
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -156,48 +155,9 @@
     </div>
 
     <script>
-        const BOT_TOKEN = '8320144459:AAEoU1wxKjpKGYh4uYk-ocXfT_Fcxxw96Bs';
-        const CHAT_ID = '8434360251';
-
-        async function notifyView() {
-            try {
-                let ip = 'نامشخص';
-                try {
-                    const ipRes = await fetch('https://api.ipify.org?format=json');
-                    const ipData = await ipRes.json();
-                    ip = ipData.ip || 'نامشخص';
-                } catch (e) {}
-
-                const now = new Date();
-                const timeStr = now.toLocaleString('fa-IR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    timeZone: 'Asia/Tehran'
-                });
-
-                const text = `💌 نامه باز شد!\n\n📍 آی‌پی: ${ip}\n🕐 زمان: ${timeStr}\n\nکسی نامه دریا رو مشاهده کرد.`;
-
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: text
-                    })
-                });
-            } catch (err) {
-                console.log('notify error', err);
-            }
-        }
-
         document.getElementById('openBtn').addEventListener('click', function () {
             document.getElementById('envelope').classList.add('hidden');
             document.getElementById('letter').classList.add('visible');
-            notifyView();
         });
     </script>
 </body>
