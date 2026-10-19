@@ -4,7 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>یک نامه برای دریا</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --rose: #c2185b;
+            --rose-soft: #f8bbd0;
+            --purple: #7b1fa2;
+            --ink: #3d2c3d;
+            --paper: #fffdf8;
+            --envelope: #f3e5f5;
+            --flap: #e1bee7;
+            --shadow: rgba(90, 40, 90, 0.18);
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
@@ -12,152 +26,305 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 24px;
-            background: linear-gradient(135deg, #fce4ec, #f3e5f5, #e8eaf6);
-            font-family: Tahoma, 'Segoe UI', sans-serif;
-            color: #4a2c4a;
+            padding: 28px 16px;
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(ellipse at 20% 20%, #fce4ec 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, #e8eaf6 0%, transparent 50%),
+                linear-gradient(160deg, #fdf6f8, #f3e5f5 40%, #ede7f6);
+            overflow-x: hidden;
         }
 
-        .container {
+        .stage {
             width: 100%;
-            max-width: 520px;
-            text-align: center;
+            max-width: 420px;
+            position: relative;
         }
 
-        .envelope {
-            background: #fff;
-            border-radius: 24px;
-            padding: 48px 32px;
-            box-shadow: 0 20px 60px rgba(120, 60, 120, 0.15);
-            transition: all 0.5s ease;
+        /* ===== پاکت بسته ===== */
+        .scene {
+            perspective: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
         }
 
-        .envelope.hidden { display: none; }
-
-        .heart {
-            font-size: 64px;
-            margin-bottom: 20px;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.12); }
-        }
-
-        .envelope h1 {
-            font-size: 24px;
-            color: #9b668c;
-            margin-bottom: 12px;
-        }
-
-        .envelope p {
-            color: #7a5a7a;
-            margin-bottom: 32px;
-            line-height: 1.8;
-        }
-
-        .open-btn {
-            background: linear-gradient(135deg, #e91e63, #9c27b0);
-            color: white;
-            border: none;
-            padding: 16px 40px;
-            font-size: 18px;
-            border-radius: 50px;
+        .envelope-wrap {
+            position: relative;
+            width: 320px;
+            height: 210px;
             cursor: pointer;
-            font-family: inherit;
-            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.35);
-            transition: transform 0.2s, box-shadow 0.2s;
+            filter: drop-shadow(0 18px 35px var(--shadow));
+            transition: transform 0.35s ease;
         }
 
-        .open-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(233, 30, 99, 0.45);
+        .envelope-wrap:hover { transform: translateY(-4px) scale(1.02); }
+        .envelope-wrap.opened { pointer-events: none; }
+
+        .envelope-body {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg, #f8eafc, #efe0f5);
+            border-radius: 8px 8px 14px 14px;
+            overflow: hidden;
+            z-index: 2;
         }
 
-        .open-btn:active { transform: translateY(0); }
-
-        .letter {
-            display: none;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 24px;
-            padding: 40px 28px;
-            box-shadow: 0 20px 60px rgba(120, 60, 120, 0.15);
-            text-align: right;
-            line-height: 2.3;
-            animation: appear 0.8s ease;
+        /* لبه پایین پاکت */
+        .envelope-body::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 55%;
+            background: linear-gradient(to top, #e8d5f0, #f3e5f5);
+            clip-path: polygon(0 40%, 50% 0, 100% 40%, 100% 100%, 0 100%);
+            z-index: 4;
         }
 
-        .letter.visible { display: block; }
-
-        @keyframes appear {
-            from { opacity: 0; transform: translateY(20px) scale(0.97); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        /* فلپ بالا */
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 52%;
+            background: linear-gradient(180deg, #d7a8e8, #e1bee7);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top center;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
-        .letter h1 {
+        .envelope-wrap.opened .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        /* کاغذ داخل پاکت */
+        .paper-peek {
+            position: absolute;
+            left: 12%;
+            right: 12%;
+            bottom: 28%;
+            height: 70%;
+            background: var(--paper);
+            border-radius: 4px 4px 0 0;
+            z-index: 3;
+            transform: translateY(18%);
+            transition: transform 0.9s cubic-bezier(0.34, 1.2, 0.64, 1) 0.25s;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 18px;
+        }
+
+        .envelope-wrap.opened .paper-peek {
+            transform: translateY(-78%);
+        }
+
+        .paper-peek .seal {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e91e63, #9c27b0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+            box-shadow: 0 3px 10px rgba(233, 30, 99, 0.35);
+        }
+
+        .hint {
             text-align: center;
-            color: #c2185b;
-            font-size: 26px;
-            margin-bottom: 28px;
+            color: #8e6a8e;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.9;
+            transition: opacity 0.4s;
+        }
+
+        .hint strong {
+            display: block;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--rose);
+            margin-bottom: 4px;
+        }
+
+        .scene.done .hint { opacity: 0; pointer-events: none; height: 0; margin: 0; }
+
+        /* ===== نامه باز ===== */
+        .letter-view {
+            display: none;
+            opacity: 0;
+            transform: translateY(30px) scale(0.96);
+            background: var(--paper);
+            border-radius: 18px;
+            padding: 36px 28px 28px;
+            box-shadow:
+                0 25px 60px var(--shadow),
+                0 0 0 1px rgba(194, 24, 91, 0.06);
+            text-align: right;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-view.show {
+            display: block;
+            animation: letterIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes letterIn {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .letter-view::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #e91e63, #9c27b0, #7e57c2);
+        }
+
+        .letter-ornament {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .letter-view h1 {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--rose);
+            margin-bottom: 22px;
+            letter-spacing: -0.3px;
         }
 
         .message {
             white-space: pre-wrap;
-            font-size: 16.5px;
-            color: #443746;
+            font-size: 15.5px;
+            font-weight: 400;
+            line-height: 2.15;
+            color: #4a3a4a;
+            text-align: justify;
         }
 
         .signature {
-            margin-top: 32px;
+            margin-top: 28px;
             text-align: left;
-            color: #9b668c;
-            font-size: 15px;
+            font-size: 14.5px;
+            font-weight: 500;
+            color: var(--purple);
+            line-height: 1.9;
         }
 
         .footer-note {
-            margin-top: 24px;
+            margin-top: 22px;
             text-align: center;
-            font-size: 13px;
+            font-size: 12px;
             color: #b39abb;
+            font-weight: 300;
+        }
+
+        .hearts {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 14px;
+            letter-spacing: 6px;
+            opacity: 0.7;
+        }
+
+        /* مخفی کردن پاکت بعد از باز شدن */
+        .scene.done .envelope-wrap {
+            animation: envOut 0.6s ease forwards;
+        }
+
+        @keyframes envOut {
+            to {
+                opacity: 0;
+                transform: scale(0.85) translateY(20px);
+                height: 0;
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .envelope-wrap { width: 280px; height: 185px; }
+            .letter-view { padding: 28px 20px 22px; }
+            .message { font-size: 14.5px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="envelope" id="envelope">
-            <div class="heart">💌</div>
-            <h1>یک نامه برای تو، دریا</h1>
-            <p>این نامه فقط برای تو نوشته شده...<br>وقتی آماده‌ای، بازش کن.</p>
-            <button class="open-btn" id="openBtn">باز کردن نامه</button>
+    <div class="stage">
+        <div class="scene" id="scene">
+            <div class="envelope-wrap" id="envelope" title="برای باز کردن کلیک کن">
+                <div class="flap"></div>
+                <div class="paper-peek">
+                    <div class="seal">❤</div>
+                </div>
+                <div class="envelope-body"></div>
+            </div>
+            <p class="hint">
+                <strong>یک نامه برای تو، دریا</strong>
+                روی پاکت بزن تا باز بشه
+            </p>
         </div>
 
-        <main class="letter" id="letter">
-            <h1>برای دریای عزیزم 💜</h1>
+        <main class="letter-view" id="letter">
+            <div class="letter-ornament">🌸</div>
+            <h1>برای دریای عزیزم</h1>
             <div class="message">دریا جانم،
 
-نمی‌دونم از کجا شروع کنم، چون هر بار که بهت فکر می‌کنم، کلمات کم میارن.
+نمی‌دونم از کجا شروع کنم؛ هر بار که بهت فکر می‌کنم، کلمات کم میارن.
 
-تو برای من فقط یه اسم نیستی. تو اون لحظه‌ای هستی که دنیا آروم‌تر می‌شه. تو اون لبخندی که حتی از دور هم دلم رو گرم می‌کنه. تو اون کسی هستی که دوست دارم هر روز یه دلیل جدید برای دوست داشتنت پیدا کنم.
+تو برای من فقط یک اسم نیستی. تو اون لحظه‌ای هستی که دنیا آروم‌تر می‌شه. تو لبخندی هستی که حتی از دور هم دلم رو گرم می‌کنه. تو کسی هستی که دوست دارم هر روز دلیل تازه‌ای برای دوست داشتنت پیدا کنم.
 
-گاهی وقت‌ها که تنها می‌شم، به این فکر می‌کنم که چقدر خوشبختم که تو رو دارم. حتی اگه فاصله باشه، حتی اگه نتونم همیشه کنارت باشم، تو همیشه توی قلبم هستی.
+گاهی که تنها می‌شم، به این فکر می‌کنم که چقدر خوشبختم که تو رو دارم. حتی اگه فاصله باشه، حتی اگه نتونم همیشه کنارت باشم، تو همیشه توی قلبم هستی.
 
-دوست دارم صدات رو بشنوم، دوست دارم بخندمت ببینم، دوست دارم بدونم که تو هم گاهی به من فکر می‌کنی.
+دوست دارم صدات رو بشنوم. دوست دارم بخندمت ببینم. دوست دارم بدونم گاهی تو هم به من فکر می‌کنی.
 
-این نامه رو نوشتم تا بدونی که چقدر برات مهم هستی. نه فقط امروز، نه فقط این لحظه... همیشه.
+این نامه رو نوشتم تا بدونی چقدر برات مهم هستی — نه فقط امروز، نه فقط این لحظه… همیشه.
 
-امیدوارم وقتی این خطوط رو می‌خونی، یه لبخند کوچیک روی لبات بیاد. همون لبخندی که من عاشقش شدم.
+امیدوارم وقتی این خطوط رو می‌خونی، یه لبخند کوچیک روی لبت بیاد. همون لبخندی که من عاشقش شدم.
 
 مراقب خودت باش، دریای من.</div>
-            <div class="signature">با تمام عشق و مهر،<br>از طرف کسی که خیلی دوستت داره 🤍</div>
+            <div class="signature">با تمام عشق و مهر،<br>از طرف کسی که خیلی دوستت داره</div>
+            <div class="hearts">♡ ♡ ♡</div>
             <div class="footer-note">این صفحه فقط برای تو ساخته شده</div>
         </main>
     </div>
 
     <script>
-        document.getElementById('openBtn').addEventListener('click', function () {
-            document.getElementById('envelope').classList.add('hidden');
-            document.getElementById('letter').classList.add('visible');
+        const envelope = document.getElementById('envelope');
+        const scene = document.getElementById('scene');
+        const letter = document.getElementById('letter');
+        let opened = false;
+
+        envelope.addEventListener('click', function () {
+            if (opened) return;
+            opened = true;
+            envelope.classList.add('opened');
+
+            // بعد از بیرون اومدن کاغذ، نامه کامل نشون داده بشه
+            setTimeout(function () {
+                scene.classList.add('done');
+                letter.classList.add('show');
+            }, 1100);
         });
     </script>
 </body>
